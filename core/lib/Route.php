@@ -7,6 +7,7 @@
  */
 
 namespace core\lib;
+use core\lib\Conf;
 class Route {
     public static $ctrl;
     public static $action;
@@ -19,6 +20,9 @@ class Route {
             if (array_key_exists(0, $pathArr)) {
                 self::$ctrl = $pathArr[0];
             }
+            else {
+                self::$ctrl = Conf::get('ctrl', route);
+            }
             //获取action
             if (array_key_exists(1, $pathArr)) {
                 self::$action = $pathArr[1];
@@ -26,7 +30,7 @@ class Route {
             else {
                 //todo
                 //从配置文件route.conf中获取action
-
+                self::$ctrl = Conf::get('action', 'route');
             }
             //将多余的参数转化为get
             if (array_key_exists(3, $pathArr)) {
@@ -42,6 +46,8 @@ class Route {
         else {
             //ctrl
             //从配置文件中获取ctrl和action
+            self::$ctrl = Conf::get('ctrl', 'route');
+            self::$action = Conf::get('action', 'route');
         }
     }
 }

@@ -8,6 +8,7 @@
 
 namespace core;
 use core\lib\Route;
+use core\lib\Conf;
 class Ra {
     public static function run() {
         Route::route();
@@ -23,14 +24,20 @@ class Ra {
             else {
                 //todo
                 //当不存在action时,从配置文件route中获取默认ctrl
+                $action = Conf::get('action', 'route');
+                $ctrl = new $ctrlClass;
+                $ctrl -> $action();
 
             }
         }
         else {
             //todo
             //当不存在controller文件时，从配置文件中获取默认ctrl和action
-
-
+            $ctrl = Conf::get('ctrl', 'route');
+            $action = Conf::get('action', 'route');
+            $ctrlClass = 'api\controller\\' . $ctrl . 'Ctrl';
+            $ctrlObj = new $ctrlClass;
+            $ctrlObj -> $action();
         }
 
     }
