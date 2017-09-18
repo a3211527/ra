@@ -1,0 +1,22 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: otorain
+ * Date: 17-9-17
+ * Time: 下午8:30
+ */
+
+define('RA', realpath("./"));
+define('API', RA . '/api/');
+define('CORE', RA . '/core/');
+define('DEBUG', true);
+if (DEBUG) {
+    ini_set('display_errors', 'On');
+}
+else {
+    ini_set('display_errors', 'Off');
+}
+include CORE . 'Ra.php';
+
+spl_autoload_register("\core\Ra::load");
+core\Ra::run();
