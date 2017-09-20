@@ -11,6 +11,7 @@ define('API', RA . '/api/');
 define('CORE', RA . '/core/');
 define('CONF', RA . '/conf/');
 define('LOG', RA . '/log/');
+define('ARTICLE', RA . '/data/article/');
 define('DEBUG', true);
 if (DEBUG) {
     ini_set('display_errors', 'On');
