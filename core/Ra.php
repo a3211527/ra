@@ -14,12 +14,14 @@ class Ra {
         Route::route();
         $ctrl = ucfirst(Route::$ctrl);
         $action = Route::$action;
-        $ctrlFile = API . $ctrl . 'Ctrl.php';
+        $ctrlFile = API . 'controller/' . $ctrl . 'Ctrl.php';
         $ctrlClass = 'api\controller\\' . $ctrl . 'Ctrl' ;
         if (file_exists($ctrlFile)) {
+
             if (method_exists($ctrlClass, $action)) {
+
                 $ctrl = new $ctrlClass;
-                $ctrl -> action();
+                $ctrl -> $action();
             }
             else {
                 //todo
