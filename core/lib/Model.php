@@ -78,6 +78,10 @@ class Model extends \PDO{
         return $res;
     }
 
+    public static function getInsertId() {
+        return self::$model -> lastInsertId();
+    }
+
     /**
      * @param $condition 删除的条件, 如 'where id = 1' 或 预编译形式 'where id = ?'
      * @param array $param 使用预编译传入的值， 如array(1)

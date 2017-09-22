@@ -5,8 +5,9 @@
  * Date: 17-9-18
  * Time: 下午5:36
  */
-namespace core\lb;
+namespace core\lib;
 use core\lib\Conf;
+use api\model\Article;
 
 class PageBean{
     private static $rowStart;
@@ -15,11 +16,12 @@ class PageBean{
     private static $pageCount;
     private static $pageSize;
     private static $res;
+    private static $pageNowCount;
 
     //从配置文件中获取pageSize并将其设为$pageSize的值
     public static function setPageSize(){
-        if (Conf::get('pageSize', 'splitPage')) {
-            self::$pageSize = Conf::get('pageSize', 'splitPage');
+        if (Conf::get('pageSize', 'pageBean')) {
+            self::$pageSize = Conf::get('pageSize', 'pageBean');
         }
         else{
             die("请查看分页配置文件中是否配置该项");
@@ -31,6 +33,15 @@ class PageBean{
     }
     //设置总行数
     public static function setRowCount() {
+        Article::init();
+        $countRes = Article::select('count(a_id)');
+        if ($countRes) {
+            $count = $countRes[0]['count(a_id)'];
+            self::$rowCount = $count;
+        }
+        else {
+            return false;
+        }
 
     }
     //获取总行数
@@ -71,5 +82,27 @@ class PageBean{
     //获取当前页起始行数
     public static function getRowStart() {
         return self::$rowStart;
+    }
+
+    //获取结果集
+    public static function getRes(){
+        Article::init();
+        self::$res = Article::select('a_id, u_name, write_date, title, content, type, pv, comment, encourage, 
+        admiration, title', 'limit ' . self::$rowStart .', '. self::$pageSize) ;
+        return self::$res;
+    }
+    //获取当前页有多少条记录
+    public static function getPageNowCount() {
+        if (self::$pageNow == self::$pageCount) {
+            self::$pageNowCount = self::$rowCount % self::$pageSize;
+            if (self::$pageNowCount === 0) {
+                self::$pageNowCount = self::$pageSize;
+            }
+            return self::$pageNowCount;
+        }
+        else {
+            self::$pageNowCount = self::$pageSize;
+            return self::$pageNowCount;
+        }
     }
 }

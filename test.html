@@ -5,10 +5,14 @@
     <title>test</title>
 </head>
 <body>
-<form action="http://10.21.62.14/login/login" method="post">
-    <span>用户名: </span><input type="text" name="username"><br/>
-    <span>密码:</span><input type="password" name="password"><br>
-    <input type="submit" value="提交">
+<form action="/admin/save" method="post">
+    <label for="username">用户名：</label><input id="username" type="text" name="username"><br>
+    <label for="title">标题: </label><input type="text" id="title" name="title"><br>
+    <label for="type">类型：</label><input type="text" id="type" name="type"><br>
+    <label for="content">内容：</label><textarea name="content" id="content" cols="30" rows="10"></textarea><br>
+    <label for="status">状态：</label><input type="text" id="status" name="status"><br>
+    <label for="collection">收藏:</label><input type="text" name="collection" id="collection"><br>
+    <input type="submit" value="保存">
 </form>
 </body>
 </html>

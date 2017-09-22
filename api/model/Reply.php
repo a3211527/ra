@@ -2,15 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: otorain
- * Date: 17-9-19
- * Time: 下午6:53
+ * Date: 17-9-22
+ * Time: 上午11:42
  */
 
 namespace api\model;
 use core\lib\Model;
 
-class Article extends Model {
+class Reply extends Model{
     public static function init() {
-        parent::init('article');
+        parent::init('reply');
     }
 }
