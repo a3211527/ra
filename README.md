@@ -24,7 +24,7 @@ API 文档
 	      密码为空  ：{200, '用户名为空'}
 	      用户名为空：{200, '密码为空'}
 
-4.保存文章 : /admin/save 
+4.保存文章 : /admin/saveArticle 
   传递方式 ：post
   参数     ： string username, string type, string content, int status[1,2,3], string collection, string title
   返回	   ： 成功       : {200, '保存成功', data['articleId' => ]}
@@ -35,11 +35,15 @@ API 文档
 5.获取文章 : /index/getArticle
   传递方式 : get 
   参数     ：int articleId, string username
-  返回     ：成功   	 ： {200, '获取内容成功', $data['content', 'username', 'type', 'pv', encourage, admiration, date, status, title]}
+  返回     ：成功   	 ： {200, '获取内容成功', $data['content', 'username', 'type', 'pv', 'encourage', 'admiration', 'date', 'status', 'title', 'comment_sum', comment[]]}
 	     失败 	 ： {200, '获取内容失败'}
   	     信息不完整  ： {200， '信息不完整'}
 
 6.获取文章分页信息 ： /index/getPageBean
   传递方式         ： get
-  参数 		   ： 
+  参数 		   ： string pageNow
+  返回 		   ： 成功 ：{200, '获取数据成功', data['rowCount', 'pageCount', 'data']}
+		      失败 ：{200, '缺少参数'}
+
+7. 获取评论        ： /index/getComment
 

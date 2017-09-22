@@ -11,7 +11,6 @@ use core\lib\PageBean;
 use core\lib\Assistant;
 use core\lib\Re;
 use api\model\Article;
-use core\lib\AdminComment;
 
 class IndexCtrl{
     public function index(){
@@ -21,21 +20,24 @@ class IndexCtrl{
         if (Assistant::checkGet(array('articleId', 'username'))) {
             $articleId = $_GET['articleId'];
             $username = $_GET['username'];
-            $content = AdminArticle::get($articleId, $username);
+            $content = AdminArticle::getArticle($articleId, $username);
             Article::init();
             $res = Article::select('type, pv, admiration, reward, write_date, status, encourage, title',
                 'where articleId=?', array($articleId));
             if ($content) {
+                $commentRes = AdminArticle::getComment($articleId);
                 $data = array(
-                    'content'    => $content,
-                    'username'   => $res[0]['username'],
-                    'type'       => $res[0]['type'],
-                    'pv'         => $res[0]['pv'],
-                    'encourage'  => $res[0]['encourage'],
-                    'admiration' => $res[0]['admiration'],
-                    'date'       => $res[0]['write_date'],
-                    'status'     => $res[0]['status'],
-                    'title'      => $res[0]['title'],
+                    'content'       => $content,
+                    'username'      => $res[0]['username'],
+                    'type'          => $res[0]['type'],
+                    'pv'            => $res[0]['pv'],
+                    'encourage'     => $res[0]['encourage'],
+                    'admiration'    => $res[0]['admiration'],
+                    'date'          => $res[0]['write_date'],
+                    'status'        => $res[0]['status'],
+                    'title'         => $res[0]['title'],
+                    'comment_sum'   => $res[0]['comment'],
+                    'comment'       => $commentRes,
                 );
                 Re::get(200, '获取内容成功', $data);
             }
@@ -75,6 +77,26 @@ class IndexCtrl{
                 'data'       => $res,
             );
             Re::get(200, '获取数据成功', $data);
+        }
+        else {
+            Re::get(200, '缺少参数');
+        }
+    }
+    //获取评论接口
+    public function getComment() {
+        if (Assistant::checkGet(array('articleId'))) {
+            $articleId = $_POST['articleId'];
+            $res = AdminArticle::getComment($articleId);
+            if ($res) {
+                Re::get(200, '获取评论成功', $res);
+            }
+            else {
+                Re::get(500, '获取评论失败');
+            }
+
+        }
+        else {
+            Re::get(200, '获取评论失败');
         }
     }
     public function test() {

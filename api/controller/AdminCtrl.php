@@ -13,7 +13,10 @@ use core\lib\AdminArticle;
 use api\model\Article;
 
 class AdminCtrl {
-    public function save() {
+    /**
+     * 保存文章接口
+     */
+    public function saveArticle() {
         /**
          * post: u_name, type, content, status
          * db:u_name, type, pv, admiration, reward, content, write_date, status
@@ -35,7 +38,7 @@ class AdminCtrl {
                 $articleId = 1;
             }
             $articlePath = ARTICLE . $username . '/' . $articleId . '.txt';
-            $isSaveFile = AdminArticle::save($content, $articleId, $username);
+            $isSaveFile = AdminArticle::saveArticle($content, $articleId, $username);
             if (!$isSaveFile) {
                 Re::get(200, '保存到文件中时失败');
             }
@@ -56,6 +59,41 @@ class AdminCtrl {
         }
         else {
             Re::get(200, '信息不完整');
+        }
+    }
+
+    //保存评论接口
+    public function saveComment() {
+        if (Assistant::checkPost(array('articleId', 'comment', 'username'))) {
+            $articleId = $_POST['articleId'];
+            $comment = $_POST['comment'];
+            $username = $_POST['username'];
+            $saveCommentRes = AdminArticle::saveComment($articleId, $comment, $username);
+            if ($saveCommentRes) {
+                Re::get(200, '保存评论成功', $saveCommentRes);
+            }
+            else {
+                Re::get(200, '保存评论失败');
+            }
+        }
+    }
+    //保存二级评论
+    public function saveReply() {
+        if (Assistant::checkPost(array('commentId', 'fromUser', 'toUser', 'reply'))) {
+            $commentId = $_POST['commentId'];
+            $fromUser = $_POST['fromUser'];
+            $toUser = $_POST['toUser'];
+            $reply = $_POST['reply'];
+        }
+        else {
+            Re::get(200, '信息不完整');
+        }
+        $res = AdminArticle::saveReply($commentId, $fromUser, $toUser, $reply);
+        if ($res) {
+            Re::get(200, '保存成功');
+        }
+        else {
+            Re::get(500, '保存失败');
         }
     }
 }
